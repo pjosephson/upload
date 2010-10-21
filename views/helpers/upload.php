@@ -84,6 +84,30 @@ class UploadHelper extends AppHelper {
 		
 		return $this->Html->link($title, $url, $options, $confirmMessage);
 	}
+	
+	function image($keyedData, $options=array()) {
+		$defaults = array(
+			'filesUrl' => '/files/',
+			'pathMethod' => 'primaryKey',
+		);
+		$options = am($defaults, $options);
+		extract($options);
+		foreach ($keyedData as $modelDotField => $data) {}
+		list($model, $field) = pluginSplit($modelDotField);
+		
+		if(isset($data[$model])) $data = $data[$model];
+		if(empty($data[$field.'_file'])) {
+			return false;
+		}
+		$url = $options['filesUrl'];
+		if($options['pathMethod']=='primaryKey') $url .= low($model).DS.$field.'_file'.DS;
+		
+		if(!empty($data['dir'])) $url .= $data['dir'].DS;
+		$url .= $data[$field.'_file'];
+		
+		return $this->Html->image($url, $options);
+	}
+	
 }
 
 ?>
