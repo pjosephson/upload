@@ -64,7 +64,7 @@ class UploadHelper extends AppHelper {
 	
 	function link($title, $keyedData=NULL, $options=array(), $confirmMessage=false) {
 		$defaults = array(
-			'filesUrl' => '/files/',
+			'filesUrl' => Configure::read('Upload.filesUrl'),
 			'pathMethod' => 'primaryKey',
 		);
 		$options = am($defaults, $options);
@@ -82,12 +82,14 @@ class UploadHelper extends AppHelper {
 		if(!empty($data['dir'])) $url .= $data['dir'].DS;
 		$url .= $data[$field.'_file'];
 		
+		unset($options['filesUrl']);
+		unset($options['pathMethod']);
 		return $this->Html->link($title, $url, $options, $confirmMessage);
 	}
 	
 	function image($keyedData, $options=array()) {
 		$defaults = array(
-			'filesUrl' => '/files/',
+			'filesUrl' => Configure::read('Upload.filesUrl'),
 			'pathMethod' => 'primaryKey',
 		);
 		$options = am($defaults, $options);
@@ -105,6 +107,8 @@ class UploadHelper extends AppHelper {
 		if(!empty($data['dir'])) $url .= $data['dir'].DS;
 		$url .= $data[$field.'_file'];
 		
+		unset($options['filesUrl']);
+		unset($options['pathMethod']);
 		return $this->Html->image($url, $options);
 	}
 	
