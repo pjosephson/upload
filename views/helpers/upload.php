@@ -50,6 +50,9 @@ class UploadHelper extends AppHelper {
 		if(!empty($this->data[$model][$name])) {
 			$response = $this->Form->label($name);
 			$response .= $this->Html->tag('p', "Current file: ".$this->data[$model][$name]);
+			$response .= $this->embed(
+				array("$model.$field" => $this->data)
+			);
 			$response .= $this->Form->input(
 				$name.'.remove',
 				array(
@@ -60,6 +63,20 @@ class UploadHelper extends AppHelper {
 		}
 		$response .= $this->Form->input('dir', array('type' => 'hidden',));
 		return $response;
+	}
+	
+	function embed($keyedData, $options=array()) {
+		$defaults = array(
+			'filesUrl' => Configure::read('Upload.filesUrl'),
+			'pathMethod' => 'primaryKey',
+		);
+		$options = am($defaults, $options);
+		extract($options);
+		foreach ($keyedData as $modelDotField => $data) {}
+		list($model, $field) = pluginSplit($modelDotField);
+		
+		if(strpos($data[$model][$field.'_type'], 'image')!==false) return $this->image($keyedData, $options);
+		return false;
 	}
 	
 	function link($title, $keyedData=NULL, $options=array(), $confirmMessage=false) {
