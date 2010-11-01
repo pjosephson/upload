@@ -94,7 +94,7 @@ class UploadHelper extends AppHelper {
 			return $this->Html->link($title, '', $options, $confirmMessage);
 		}
 		$url = $options['filesUrl'];
-		if($options['pathMethod']=='primaryKey') $url .= low($model).DS.$field.'_file'.DS;
+		if($options['pathMethod']=='primaryKey') $url .= Inflector::underscore($model).DS.$field.'_file'.DS;
 		
 		if(!empty($data['dir'])) $url .= $data['dir'].DS;
 		$url .= $data[$field.'_file'];
@@ -119,7 +119,7 @@ class UploadHelper extends AppHelper {
 			return false;
 		}
 		$url = $options['filesUrl'];
-		if($options['pathMethod']=='primaryKey') $url .= low($model).DS.$field.'_file'.DS;
+		if($options['pathMethod']=='primaryKey') $url .= Inflector::underscore($model).DS.$field.'_file'.DS;
 		
 		if(!empty($data['dir'])) $url .= $data['dir'].DS;
 		$url .= $data[$field.'_file'];
