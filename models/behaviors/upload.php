@@ -36,7 +36,7 @@ class UploadBehavior extends ModelBehavior {
 		'thumbnails'		=> true,
 		'thumbsizes'		=> array(),
 		'thumbnailQuality'	=> 75,
-		'thumbnailMethod'	=> 'imagick',
+		'thumbnailMethod'	=> 'php',
 	);
 
 	var $_imageMimetypes = array(

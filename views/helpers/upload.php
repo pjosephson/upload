@@ -51,7 +51,8 @@ class UploadHelper extends AppHelper {
 			$response = $this->Form->label($name);
 			$response .= $this->Html->tag('p', "Current file: ".$this->data[$model][$name]);
 			$response .= $this->embed(
-				array("$model.$field" => $this->data)
+				array("$model.$field" => $this->data),
+				$options
 			);
 			$response .= $this->Form->input(
 				$name.'.remove',
@@ -122,6 +123,7 @@ class UploadHelper extends AppHelper {
 		if($options['pathMethod']=='primaryKey') $url .= Inflector::underscore($model).DS.$field.'_file'.DS;
 		
 		if(!empty($data['dir'])) $url .= $data['dir'].DS;
+		if(!empty($displayVariation)) $url .= $displayVariation.'_';
 		$url .= $data[$field.'_file'];
 		
 		unset($options['filesUrl']);
