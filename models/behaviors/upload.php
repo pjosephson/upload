@@ -134,6 +134,7 @@ class UploadBehavior extends ModelBehavior {
 	function afterSave(&$model, $created) {
 		$temp = array($model->alias => array());
 		foreach ($this->settings[$model->alias] as $field => $options) {
+			if (empty($model->data[$model->alias][$field]) || !is_array($model->data[$model->alias][$field])) continue;
 			if (!in_array($field, array_keys($model->data[$model->alias]))) continue;
 			if (empty($this->runtime[$model->alias][$field])) continue;
 
