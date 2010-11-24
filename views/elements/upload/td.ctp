@@ -37,7 +37,7 @@ extract($options);
 		<?php
 		echo $this->Upload->embed(
 			array("$model.$field" => $data,),
-			array('displayVariation' => $displayVariation,)
+			$options
 		);
 		?>
 	</td>

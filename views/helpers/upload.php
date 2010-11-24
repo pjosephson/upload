@@ -111,6 +111,11 @@ class UploadHelper extends AppHelper {
 			'pathMethod' => 'primaryKey',
 		);
 		$options = am($defaults, $options);
+		$imageOptions = array_intersect_key($options, array(
+			'width' => null,
+			'height' => null,
+			'alt' => null,
+		));
 		extract($options);
 		foreach ($keyedData as $modelDotField => $data) {}
 		list($model, $field) = pluginSplit($modelDotField);
@@ -128,7 +133,7 @@ class UploadHelper extends AppHelper {
 		
 		unset($options['filesUrl']);
 		unset($options['pathMethod']);
-		return $this->Html->image($url, $options);
+		return $this->Html->image($url, $imageOptions);
 	}
 	
 }
