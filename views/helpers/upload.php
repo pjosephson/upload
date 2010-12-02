@@ -38,17 +38,18 @@ class UploadHelper extends AppHelper {
 	}
 	
 	function input($field, $options = array()) {
+		$name = $field.'_file';
 		$defaults = array(
 			'type' => 'file',
 			'model' => $this->Form->model(),
 		);
 		$options = am($defaults, $options);
 		extract($options);
+		if(empty($label)) $label = $name;
 		
-		$name = $field.'_file';
 		$response = $this->Form->input($name, $options);
 		if(!empty($this->data[$model][$name])) {
-			$response = $this->Form->label($name);
+			$response = $this->Form->label($label);
 			$response .= $this->Html->tag('p', "Current file: ".$this->data[$model][$name]);
 			$response .= $this->embed(
 				array("$model.$field" => $this->data),
