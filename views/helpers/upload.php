@@ -86,37 +86,47 @@ class UploadHelper extends AppHelper {
 			'pathMethod' => 'primaryKey',
 		);
 		$options = am($defaults, $options);
+		$linkOptions = array_intersect_key($options, array(
+			'target' => null,
+			'rel' => null,
+			'class' => null,
+		));
 		extract($options);
-		foreach ($keyedData as $modelDotField => $data) {}
-		list($model, $field) = pluginSplit($modelDotField);
-		
-		if(isset($data[$model])) $data = $data[$model];
-		if(empty($data[$field.'_file'])) {
-			return $this->Html->link($title, '', $options, $confirmMessage);
+
+		$url = $this->url($keyedData, $options);		
+		if(empty($url)) {
+			return $this->Html->link($title, '', $linkOptions, $confirmMessage);
 		}
-		$url = $options['filesUrl'];
-		if($options['pathMethod']=='primaryKey') $url .= Inflector::underscore($model).DS.$field.'_file'.DS;
-		
-		if(!empty($data['dir'])) $url .= $data['dir'].DS;
-		$url .= $data[$field.'_file'];
-		
-		unset($options['filesUrl']);
-		unset($options['pathMethod']);
-		return $this->Html->link($title, $url, $options, $confirmMessage);
+
+		return $this->Html->link($title, $url, $linkOptions, $confirmMessage);
 	}
 	
 	function image($keyedData, $options=array()) {
 		$defaults = array(
 			'filesUrl' => Configure::read('Upload.filesUrl'),
 			'pathMethod' => 'primaryKey',
+			'alt' => '',
 		);
 		$options = am($defaults, $options);
 		$imageOptions = array_intersect_key($options, array(
 			'width' => null,
 			'height' => null,
 			'alt' => null,
+			'class' => null,
 		));
 		extract($options);
+
+		$url = $this->url($keyedData, $options);		
+		return $this->Html->image($url, $imageOptions);
+	}
+	
+	function url($keyedData, $options=array()) {
+		$defaults = array(
+			'filesUrl' => Configure::read('Upload.filesUrl'),
+			'pathMethod' => 'primaryKey',
+		);
+		$options = am($defaults, $options);
+		
 		foreach ($keyedData as $modelDotField => $data) {}
 		list($model, $field) = pluginSplit($modelDotField);
 		
@@ -124,6 +134,7 @@ class UploadHelper extends AppHelper {
 		if(empty($data[$field.'_file'])) {
 			return false;
 		}
+		
 		$url = $options['filesUrl'];
 		if($options['pathMethod']=='primaryKey') $url .= Inflector::underscore($model).DS.$field.'_file'.DS;
 		
@@ -131,9 +142,7 @@ class UploadHelper extends AppHelper {
 		if(!empty($displayVariation)) $url .= $displayVariation.'_';
 		$url .= $data[$field.'_file'];
 		
-		unset($options['filesUrl']);
-		unset($options['pathMethod']);
-		return $this->Html->image($url, $imageOptions);
+		return $url;
 	}
 	
 }
