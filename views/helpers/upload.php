@@ -127,6 +127,7 @@ class UploadHelper extends AppHelper {
 			'pathMethod' => 'primaryKey',
 		);
 		$options = am($defaults, $options);
+		extract($options);
 		
 		foreach ($keyedData as $modelDotField => $data) {}
 		list($model, $field) = pluginSplit($modelDotField);
