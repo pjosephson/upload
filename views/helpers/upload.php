@@ -71,6 +71,7 @@ class UploadHelper extends AppHelper {
 		$defaults = array(
 			'filesUrl' => Configure::read('Upload.filesUrl'),
 			'pathMethod' => 'primaryKey',
+			'emptyDefault' => true,
 		);
 		$options = am($defaults, $options);
 		extract($options);
@@ -125,6 +126,8 @@ class UploadHelper extends AppHelper {
 		$defaults = array(
 			'filesUrl' => Configure::read('Upload.filesUrl'),
 			'pathMethod' => 'primaryKey',
+			'emptyDefault' => true,
+			'emptyDefaultExtension' => 'jpg',
 		);
 		$options = am($defaults, $options);
 		extract($options);
@@ -133,17 +136,18 @@ class UploadHelper extends AppHelper {
 		list($model, $field) = pluginSplit($modelDotField);
 		
 		if(isset($data[$model])) $data = $data[$model];
-		if(empty($data[$field.'_file'])) {
+		if(empty($data[$field.'_file']) && empty($emptyDefault)) {
 			return false;
 		}
 		
 		$url = $options['filesUrl'];
 		if($options['pathMethod']=='primaryKey') $url .= Inflector::underscore($model).DS.$field.'_file'.DS;
 		
-		if(!empty($data['dir'])) $url .= $data['dir'].DS;
+		if(!empty($data['dir']) && !empty($data[$field.'_file'])) $url .= $data['dir'].DS;
+		else $url .= 'default'.DS;
 		if(!empty($displayVariation)) $url .= $displayVariation.'_';
-		$url .= $data[$field.'_file'];
-		
+		if(!empty($data[$field.'_file'])) $url .= $data[$field.'_file'];
+		else $url .= 'default.'.$emptyDefaultExtension;
 		return $url;
 	}
 	
